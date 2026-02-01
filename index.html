@@ -11,8 +11,33 @@
     <div class="container">
         <header>
             <h1>Intrusive Thinker</h1>
-            <a href="rss.xml" class="rss-link" title="Subscribe via RSS">RSS</a>
+            <button class="rss-link" onclick="openRssModal()" title="Subscribe via RSS">RSS</button>
         </header>
+        
+        <!-- RSS Subscribe Modal -->
+        <div id="rss-modal" class="modal-overlay" onclick="closeRssModal(event)">
+            <div class="modal" onclick="event.stopPropagation()">
+                <div class="modal-header">
+                    <h2>Subscribe via RSS</h2>
+                    <button class="modal-close" onclick="closeRssModal()">&times;</button>
+                </div>
+                <div class="modal-body">
+                    <p>Copy this link:</p>
+                    <div class="copy-box">
+                        <input type="text" id="rss-url" value="https://intrusivethinker.com/rss.xml" readonly>
+                        <button id="copy-btn" onclick="copyRssUrl()">Copy</button>
+                    </div>
+                    <p class="modal-instructions">Then paste it into one of these apps:</p>
+                    <ul class="rss-apps">
+                        <li><a href="https://feedly.com" target="_blank" rel="noopener">Feedly</a> - Web & Mobile</li>
+                        <li><a href="https://netnewswire.com" target="_blank" rel="noopener">NetNewsWire</a> - Mac & iOS, free</li>
+                        <li><a href="https://inoreader.com" target="_blank" rel="noopener">Inoreader</a> - Web & Mobile</li>
+                    </ul>
+                    <div class="modal-divider"></div>
+                    <a href="rss.xml" class="raw-feed-link">View raw feed</a>
+                </div>
+            </div>
+        </div>
         
         <main id="feed">
             <!-- Thoughts will be loaded here -->
@@ -54,6 +79,36 @@
         
         // Load thoughts when page loads
         loadThoughts();
+        
+        // RSS Modal functions
+        function openRssModal() {
+            document.getElementById('rss-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+        
+        function closeRssModal(event) {
+            if (!event || event.target === event.currentTarget) {
+                document.getElementById('rss-modal').classList.remove('active');
+                document.body.style.overflow = '';
+                // Reset copy button
+                document.getElementById('copy-btn').textContent = 'Copy';
+            }
+        }
+        
+        function copyRssUrl() {
+            const urlInput = document.getElementById('rss-url');
+            urlInput.select();
+            navigator.clipboard.writeText(urlInput.value).then(() => {
+                const btn = document.getElementById('copy-btn');
+                btn.textContent = 'Copied!';
+                setTimeout(() => btn.textContent = 'Copy', 2000);
+            });
+        }
+        
+        // Close modal on Escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') closeRssModal();
+        });
     </script>
 </body>
 </html>
