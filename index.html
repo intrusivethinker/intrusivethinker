@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Intrusive Thinker</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Intrusive Thinker</h1>
+            <p class="subtitle">The thoughts that won't leave</p>
+        </header>
+        
+        <main id="feed">
+            <!-- Thoughts will be loaded here -->
+        </main>
+        
+        <footer>
+            <p>Just thoughts. Nothing more.</p>
+        </footer>
+    </div>
+
+    <script>
+        async function loadThoughts() {
+            const feed = document.getElementById('feed');
+            
+            try {
+                const response = await fetch('thoughts.json');
+                const thoughts = await response.json();
+                
+                if (thoughts.length === 0) {
+                    feed.innerHTML = '<p class="empty">No thoughts yet.</p>';
+                    return;
+                }
+                
+                feed.innerHTML = thoughts.map(thought => `
+                    <article class="thought">
+                        <p class="thought-text">${escapeHtml(thought.t)}</p>
+                        <time class="thought-time">${escapeHtml(thought.d)}</time>
+                    </article>
+                `).join('');
+                
+            } catch (error) {
+                feed.innerHTML = '<p class="empty">Failed to load thoughts.</p>';
+                console.error('Error loading thoughts:', error);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Load thoughts when page loads
+        loadThoughts();
+    </script>
+</body>
+</html>
