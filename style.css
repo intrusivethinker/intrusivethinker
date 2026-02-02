@@ -261,6 +261,8 @@ h1 {
     display: inline-flex !important;
     flex-direction: row !important;
     gap: 4px;
+    opacity: 1 !important;
+    visibility: visible !important;
 }
 
 .action-btn {
