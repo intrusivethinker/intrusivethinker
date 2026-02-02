@@ -244,9 +244,73 @@ h1 {
 }
 
 .thought-time {
-    display: block;
     font-size: 0.8rem;
     color: #657786;
+}
+
+.thought-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.thought-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+
+.thought:hover .thought-actions {
+    opacity: 1;
+}
+
+.action-btn {
+    background: none;
+    border: none;
+    padding: 6px;
+    cursor: pointer;
+    color: #657786;
+    border-radius: 50%;
+    transition: all 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.action-btn:hover {
+    background: rgba(29, 161, 242, 0.1);
+    color: #1da1f2;
+}
+
+.thought.highlighted {
+    animation: highlightPulse 2s ease;
+}
+
+@keyframes highlightPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(29, 161, 242, 0); }
+    50% { box-shadow: 0 0 0 4px rgba(29, 161, 242, 0.3); }
+}
+
+/* Toast notification */
+.toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: #14171a;
+    color: #fff;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    opacity: 0;
+    transition: all 0.3s ease;
+    z-index: 1001;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 /* Empty state */
@@ -389,5 +453,19 @@ footer p {
     
     .raw-feed-link:hover {
         color: #ffffff;
+    }
+    
+    .action-btn {
+        color: #8899a6;
+    }
+    
+    .action-btn:hover {
+        background: rgba(29, 161, 242, 0.2);
+        color: #1da1f2;
+    }
+    
+    .toast {
+        background: #ffffff;
+        color: #14171a;
     }
 }

@@ -63,11 +63,37 @@
                 feed.innerHTML = thoughts.map((thought, index) => {
                     const thoughtNum = total - index;
                     return `
-                    <article class="thought">
+                    <article class="thought" id="thought-${thoughtNum}">
                         <p class="thought-text">${escapeHtml(thought.t)}</p>
-                        <time class="thought-time">#${thoughtNum} · ${escapeHtml(thought.d)}</time>
+                        <div class="thought-footer">
+                            <time class="thought-time">#${thoughtNum} · ${escapeHtml(thought.d)}</time>
+                            <div class="thought-actions">
+                                <button class="action-btn" onclick="copyText(${thoughtNum})" title="Copy text">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect>
+                                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path>
+                                    </svg>
+                                </button>
+                                <button class="action-btn" onclick="shareThought(${thoughtNum})" title="Share">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"></path>
+                                        <polyline points="16 6 12 2 8 6"></polyline>
+                                        <line x1="12" y1="2" x2="12" y2="15"></line>
+                                    </svg>
+                                </button>
+                            </div>
+                        </div>
                     </article>
                 `}).join('');
+                
+                // Scroll to thought if hash in URL
+                if (window.location.hash) {
+                    const target = document.querySelector(window.location.hash);
+                    if (target) {
+                        setTimeout(() => target.scrollIntoView({ behavior: 'smooth', block: 'center' }), 100);
+                        target.classList.add('highlighted');
+                    }
+                }
                 
             } catch (error) {
                 feed.innerHTML = '<p class="empty">Failed to load thoughts.</p>';
@@ -113,6 +139,42 @@
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') closeRssModal();
         });
+        
+        // Copy thought text
+        function copyText(num) {
+            const thought = document.querySelector(`#thought-${num} .thought-text`);
+            navigator.clipboard.writeText(thought.textContent).then(() => {
+                showToast('Text copied!');
+            });
+        }
+        
+        // Share thought link
+        function shareThought(num) {
+            const url = `${window.location.origin}${window.location.pathname}#thought-${num}`;
+            if (navigator.share) {
+                navigator.share({ url: url });
+            } else {
+                navigator.clipboard.writeText(url).then(() => {
+                    showToast('Link copied!');
+                });
+            }
+        }
+        
+        // Toast notification
+        function showToast(message) {
+            const existing = document.querySelector('.toast');
+            if (existing) existing.remove();
+            
+            const toast = document.createElement('div');
+            toast.className = 'toast';
+            toast.textContent = message;
+            document.body.appendChild(toast);
+            setTimeout(() => toast.classList.add('show'), 10);
+            setTimeout(() => {
+                toast.classList.remove('show');
+                setTimeout(() => toast.remove(), 300);
+            }, 2000);
+        }
     </script>
 </body>
 </html>
