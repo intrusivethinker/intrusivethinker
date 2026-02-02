@@ -11,10 +11,7 @@
     <div class="container">
         <header>
             <h1>Intrusive Thinker</h1>
-            <div class="header-meta">
-                <span id="thought-count" class="thought-count"></span>
-                <button class="rss-link" onclick="openRssModal()" title="Subscribe via RSS">RSS</button>
-            </div>
+            <button class="rss-link" onclick="openRssModal()" title="Subscribe via RSS">RSS</button>
         </header>
         
         <!-- RSS Subscribe Modal -->
@@ -56,20 +53,21 @@
                 const response = await fetch('thoughts.json');
                 const thoughts = await response.json();
                 
-                // Update thought counter
-                document.getElementById('thought-count').textContent = thoughts.length + ' thought' + (thoughts.length === 1 ? '' : 's');
-                
                 if (thoughts.length === 0) {
                     feed.innerHTML = '<p class="empty">No thoughts yet.</p>';
                     return;
                 }
                 
-                feed.innerHTML = thoughts.map(thought => `
+                // Chronological numbering: oldest = #1, newest = #(total)
+                const total = thoughts.length;
+                feed.innerHTML = thoughts.map((thought, index) => {
+                    const thoughtNum = total - index;
+                    return `
                     <article class="thought">
                         <p class="thought-text">${escapeHtml(thought.t)}</p>
-                        <time class="thought-time">${escapeHtml(thought.d)}</time>
+                        <time class="thought-time">#${thoughtNum} · ${escapeHtml(thought.d)}</time>
                     </article>
-                `).join('');
+                `}).join('');
                 
             } catch (error) {
                 feed.innerHTML = '<p class="empty">Failed to load thoughts.</p>';
