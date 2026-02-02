@@ -144,7 +144,7 @@
         function copyText(num) {
             const thought = document.querySelector(`#thought-${num} .thought-text`);
             navigator.clipboard.writeText(thought.textContent).then(() => {
-                showToast('Text copied!');
+                showToast('Text copied to clipboard!');
             });
         }
         
