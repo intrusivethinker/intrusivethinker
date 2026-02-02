@@ -16,8 +16,17 @@ jobs:
       contents: write
     
     steps:
+      - name: Wait for Pages deployment to start
+        run: sleep 30
+      
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+      
+      - name: Pull latest changes
+        run: git pull origin main
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
