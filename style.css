@@ -261,12 +261,6 @@ h1 {
     display: inline-flex !important;
     flex-direction: row !important;
     gap: 4px;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
-
-.thought:hover .thought-actions {
-    opacity: 1;
 }
 
 .action-btn {
