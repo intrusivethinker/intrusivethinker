@@ -11,6 +11,10 @@
     <div class="container">
         <header>
             <h1>Intrusive Thinker</h1>
+            <div class="header-meta">
+                <span id="thought-count" class="thought-count"></span>
+                <button class="rss-link" onclick="openRssModal()" title="Subscribe via RSS">RSS</button>
+            </div>
         </header>
         
         <!-- RSS Subscribe Modal -->
@@ -42,9 +46,6 @@
             <!-- Thoughts will be loaded here -->
         </main>
         
-        <footer>
-            <button class="rss-link" onclick="openRssModal()" title="Subscribe via RSS">RSS</button>
-        </footer>
     </div>
 
     <script>
@@ -54,6 +55,9 @@
             try {
                 const response = await fetch('thoughts.json');
                 const thoughts = await response.json();
+                
+                // Update thought counter
+                document.getElementById('thought-count').textContent = thoughts.length + ' thought' + (thoughts.length === 1 ? '' : 's');
                 
                 if (thoughts.length === 0) {
                     feed.innerHTML = '<p class="empty">No thoughts yet.</p>';

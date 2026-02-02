@@ -34,9 +34,21 @@ h1 {
     margin-bottom: 4px;
 }
 
+.header-meta {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 10px;
+}
+
+.thought-count {
+    font-size: 0.85rem;
+    color: #657786;
+}
+
 .rss-link {
     display: inline-block;
-    margin-top: 10px;
     padding: 6px 14px;
     font-size: 0.8rem;
     font-weight: 500;
@@ -336,6 +348,10 @@ footer p {
     
     footer p {
         color: #5b7083;
+    }
+    
+    .thought-count {
+        color: #8899a6;
     }
     
     .rss-link {
